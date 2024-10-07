@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tercer entrega</title>
+    <style>
+        <style>
+        /* Aquí definimos la grilla de plazas y su diseño básico */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 60px); /* 5 columnas */
+            gap: 10px; /* Espacio entre plazas */
+        }
+
+        .parking-spot {
+            width: 60px;
+            height: 60px;
+            background-color: white;
+            border: 1px solid black;
+            text-align: center;
+            line-height: 60px;
+            cursor: pointer;
+        }
+
+        /* Clases para los diferentes estados de las plazas */
+        .selected {
+            background-color: yellow;
+        }
+
+        .bought {
+            background-color: red;
+            cursor: not-allowed;
+        }
+    </style>
+    </style>
+</head>
+<body>
+    <center>
+    
+        <h1>Places for parking</h1>
+        <div id="grid">
+            <!-- En esta seccion se dibuja la matriz de plazas -->
+
+        </div>
+
+    </center>
+</body>
+</html>
