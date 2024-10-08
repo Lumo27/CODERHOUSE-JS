@@ -106,8 +106,29 @@ const handleOnClick = () => {
         messageDiv.appendChild(messageBTN);
     }
 };
+/* Boton y funcion para limpiar la seleccion del localstorage, y pintar los spots */
+const createDeleteButton = () => {
+    const button1= document.createElement('button');
+    button1.innerText = 'Restart places';
+    button1.id='deleteButton';
+    
+    button1.addEventListener('click', handleonClick1);
+    const gridContainer = document.getElementById('parkingGrid');
+    gridContainer.appendChild(button1);
+}
+const handleonClick1 = () => {
+    localStorage.removeItem('boughtSpots');
+    boughtSpots.length = 0;
+    document.querySelectorAll('.parking-spot').forEach(spot => {
+    spot.classList.remove('bought');
+    const messageDiv = document.getElementById('message');
+    messageDiv.innerHTML = '';
+    });
+};
+
 
 // Crear la matriz y el botón
 createParkingGrid();
 loadBoughtSpots();
 createBuyButton();
+createDeleteButton();

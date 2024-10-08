@@ -25,6 +25,7 @@
             line-height: 60px;
             cursor: pointer;
             margin-left: 20px;
+            justify-content: space-between;
         }
 
         /* Clases para los diferentes estados de las plazas */
@@ -35,14 +36,22 @@
         .bought {
             background-color: red;
         }
-        
-        button {
-            width: 120px;
-            height: 60px;
-            margin-left: 20px; /* Para separarlo de la grilla */
-            padding: 10px 20px; /* Para darle un poco de tamaño */
-            font-size: 16px; /* Tamaño de fuente */
+        .button-container {
+            display: flex;
+            gap: 10px; /* Espacio entre los botones */
+            justify-content: flex-start; /* Alinea los botones al inicio */
+            margin-top: 20px; /* Opcional: Añadir margen superior si es necesario */
         }
+        .button-container button {
+            padding: 10px 20px; /* Ajusta el tamaño de los botones */
+        }
+        button{
+            justify-content: center;
+            width: 4rem;
+            height: 5rem;
+            margin-left: 20px;
+        }
+      
     </style>
 </head>
 <body>
@@ -54,9 +63,13 @@
     <div id="payButtonContainer">
             <!-- Boton para comprar lo seleccionado -->
     </div>
-
+    <div class="button-container">
     <div id="message">
         <!-- Aca se renderiza el mensaje una vez que compra -->
+    </div>
+    <div id="clean">
+        <!-- Boton para limpiar el localstorage -->
+    </div>
     </div>
     <!-- Script a la logica -->
     <script src="index.js"></script>
