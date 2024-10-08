@@ -42,12 +42,22 @@ const handleSpotClick = (e) => {
     let spot = e.target;
     let spotId = spot.id;
 
-    if (selectedSpots.includes(spotId)) {
-        spot.classList.remove('selected');
+    // Si el spot está en el estado 'bought', lo "descompramos"
+    if (spot.classList.contains('bought')) {
+        spot.classList.remove('bought');
+        // Eliminar del arreglo seleccionado (si corresponde)
         selectedSpots = selectedSpots.filter(id => id !== spotId);
-    } else {
+    } 
+    // Si el spot ya está seleccionado, lo deseleccionamos
+    else if (selectedSpots.includes(spotId)) {
+        spot.classList.remove('selected');
+        // Eliminar del arreglo seleccionado
+        selectedSpots = selectedSpots.filter(id => id !== spotId);
+    } 
+    // Si el spot no está seleccionado ni comprado, lo seleccionamos
+    else {
         spot.classList.add('selected');
-        selectedSpots.push(spotId);
+        selectedSpots.push(spotId); // Agregar al arreglo
     }
 };
 
@@ -60,6 +70,7 @@ const handleOnClick = () => {
         const messageBTN = document.createElement('p');
         messageBTN.innerText = `You have bought these spots: ${selectedSpots.join(', ')}`;
         messageDiv.appendChild(messageBTN);
+        //Cambiamos la clase selected a bougth una vez presionado el boton.
         selectedSpots.forEach(spotId => {
             const spot= document.getElementById(spotId);
             spot.classList.remove('selected');
