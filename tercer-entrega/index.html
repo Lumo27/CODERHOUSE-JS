@@ -10,42 +10,51 @@
             display: grid;
             grid-template-columns: repeat(5, 60px); /* 5 columnas */
             gap: 10px; /* Espacio entre plazas */
+            margin: 20px; /* Espacio inferior para separar de botón */
+            border: 2px rgb(39, 9, 9) solid;
+            padding: 20px;
+            
         }
 
         .parking-spot {
             width: 60px;
             height: 60px;
-            background-color: white;
+            background-color: rgb(9, 200, 184);
             border: 1px solid black;
             text-align: center;
             line-height: 60px;
             cursor: pointer;
+            margin-left: 20px;
         }
 
         /* Clases para los diferentes estados de las plazas */
         .selected {
-            background-color: yellow;
+            background-color: rgb(208, 198, 0);
         }
 
         .bought {
             background-color: red;
             cursor: not-allowed;
         }
+        
+        button {
+            width: 120px;
+            height: 60px;
+            margin-left: 20px; /* Para separarlo de la grilla */
+            padding: 10px 20px; /* Para darle un poco de tamaño */
+            font-size: 16px; /* Tamaño de fuente */
+        }
     </style>
 </head>
 <body>
-   
-    
-        <h1>Places for parking</h1>
-        <div class="grid" id="parkingGrid">
-            <!-- En esta seccion se dibuja la matriz de plazas -->
+    <h1>Places for parking</h1>
+    <div class="grid" id="parkingGrid">
+        <!-- En esta seccion se dibuja la matriz de plazas -->
+    </div>
+    <!-- Boton para comprar lo seleccionado -->
+    <div id="payButtonContainer"></div>
 
-            <!-- Boton para comprar lo seleccionado -->
-            <div class="btn" id="payButton"></div>
-            <!-- Script a la logica -->
-        <script src="index.js"></script>
-        </div>
-
-   
+    <!-- Script a la logica -->
+    <script src="index.js"></script>
 </body>
 </html>
