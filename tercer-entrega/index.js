@@ -3,6 +3,17 @@ const gridSize = 5;
 
 /* Declaracion de un arreglo para ir metiendo los spots seleccionados */
 let selectedSpots = [];
+let boughtSpots = JSON.parse(localStorage.getItem('boughtSpots')) || []; // Cambié a let para poder modificarlo
+
+// Primer recorrido inicial para pintar lo que ya fue seleccionado o no.
+const loadBoughtSpots = () => {
+    boughtSpots.forEach(spotId => {
+        const spot = document.getElementById(spotId);
+        if (spot) {
+            spot.classList.add('bought'); // Añadir clase 'bought' a los spots comprados
+        }
+    });
+};
 
 /* Funcion para crear la matriz de parkingGrid */
 const createParkingGrid = () => {
@@ -13,7 +24,7 @@ const createParkingGrid = () => {
         for (let column = 0; column < gridSize; column++) {
             const spot = document.createElement('div');
             const spotId = `F${fila + 1}C${column + 1}`;
-            
+
             spot.id = spotId;
             spot.classList.add('parking-spot');
             spot.innerText = spotId;
@@ -44,9 +55,13 @@ const handleSpotClick = (e) => {
 
     // Si el spot está en el estado 'bought', lo "descompramos"
     if (spot.classList.contains('bought')) {
-        spot.classList.remove('bought');
-        // Eliminar del arreglo seleccionado (si corresponde)
-        selectedSpots = selectedSpots.filter(id => id !== spotId);
+        // Eliminar del arreglo de spots comprados
+        boughtSpots = boughtSpots.filter(id => id !== spotId);
+        spot.classList.remove('bought'); // Remover clase 'bought'
+        
+        // Actualizar el localStorage
+        localStorage.setItem('boughtSpots', JSON.stringify(boughtSpots));
+
     } 
     // Si el spot ya está seleccionado, lo deseleccionamos
     else if (selectedSpots.includes(spotId)) {
@@ -61,7 +76,7 @@ const handleSpotClick = (e) => {
     }
 };
 
-/* Funcion para manejar la compra */
+/* Funcion para manejar la compra - MOMENTO DE COMPRAR SPOTS */
 const handleOnClick = () => {
     const messageDiv = document.getElementById('message');
     messageDiv.innerHTML = '';  // Limpiamos el div antes de mostrar el nuevo mensaje
@@ -70,15 +85,20 @@ const handleOnClick = () => {
         const messageBTN = document.createElement('p');
         messageBTN.innerText = `You have bought these spots: ${selectedSpots.join(', ')}`;
         messageDiv.appendChild(messageBTN);
-        //Cambiamos la clase selected a bougth una vez presionado el boton.
+
+        // Cambiamos la clase selected a bought una vez presionado el boton.
         selectedSpots.forEach(spotId => {
-            const spot= document.getElementById(spotId);
+            const spot = document.getElementById(spotId);
             spot.classList.remove('selected');
             spot.classList.add('bought');
         });
 
-        // Guardamos la seleccion en localStorage
-        localStorage.setItem('selectedSpots', JSON.stringify(selectedSpots));
+        // Actualizar boughtSpots y guardar en localStorage
+        boughtSpots.push(...selectedSpots);
+        localStorage.setItem('boughtSpots', JSON.stringify(boughtSpots));
+
+        // Limpiar selectedSpots después de la compra
+        selectedSpots = [];
 
     } else {
         const messageBTN = document.createElement('p');
@@ -89,5 +109,5 @@ const handleOnClick = () => {
 
 // Crear la matriz y el botón
 createParkingGrid();
+loadBoughtSpots();
 createBuyButton();
-
