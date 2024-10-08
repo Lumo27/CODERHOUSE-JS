@@ -60,6 +60,11 @@ const handleOnClick = () => {
         const messageBTN = document.createElement('p');
         messageBTN.innerText = `You have bought these spots: ${selectedSpots.join(', ')}`;
         messageDiv.appendChild(messageBTN);
+        selectedSpots.forEach(spotId => {
+            const spot= document.getElementById(spotId);
+            spot.classList.remove('selected');
+            spot.classList.add('bought');
+        });
 
         // Guardamos la seleccion en localStorage
         localStorage.setItem('selectedSpots', JSON.stringify(selectedSpots));
