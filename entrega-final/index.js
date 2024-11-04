@@ -1,132 +1,124 @@
-// Arrays para almacenar las tareas y el historial de movimientos
+// Arrays para almacenar las tareas en cada columna y el historial
 let tasks = [];
-let moveHistory = [];
+let history = [];
 
-// Función para renderizar las tareas en las columnas correspondientes
+// Función para renderizar tareas en las columnas correspondientes
 function renderTasks() {
     const columns = {
         "To Do": document.getElementById("toDoColumn"),
         "In Progress": document.getElementById("inProgressColumn"),
-        "Done": document.getElementById("doneColumn"),
+        "Done": document.getElementById("doneColumn")
     };
 
     // Limpiamos las columnas antes de renderizar
-    Object.values(columns).forEach(column => (column.innerHTML = ""));
+    Object.values(columns).forEach(column => column.innerHTML = "<h2>" + column.querySelector("h2").innerText + "</h2>");
 
     // Renderizamos cada tarea en su columna
     tasks.forEach(task => {
-        const taskElement = document.createElement("div");
-        taskElement.classList.add("task");
-        taskElement.innerText = task.title;
-
-        // Botón para mover la tarea
-        const moveButton = document.createElement("button");
-        moveButton.innerText = "Mover";
-        moveButton.onclick = () => moveTask(task.id);
-        taskElement.appendChild(moveButton);
-
-        // Botón para eliminar la tarea
-        const deleteButton = document.createElement("button");
-        deleteButton.innerText = "Eliminar";
-        deleteButton.onclick = () => deleteTask(task.id);
-        taskElement.appendChild(deleteButton);
-
+        const taskElement = createTaskElement(task);
         columns[task.status].appendChild(taskElement);
     });
-
-    // Renderizar el historial
-    renderHistory();
 }
 
-// Función para renderizar el historial de tareas
-function renderHistory() {
-    const historyContainer = document.getElementById("historyContainer");
-    historyContainer.innerHTML = ""; // Limpiamos el historial antes de renderizar
+// Función para crear un elemento de tarea
+function createTaskElement(task) {
+    const taskElement = document.createElement("div");
+    taskElement.classList.add("task");
+    taskElement.innerText = task.title;
 
-    moveHistory.forEach(entry => {
-        const historyElement = document.createElement("div");
-        historyElement.innerText = `Tarea ID: ${entry.taskId}, Estado anterior: ${entry.oldStatus}, Estado nuevo: ${entry.newStatus}, Fecha: ${entry.date}`;
-        historyContainer.appendChild(historyElement);
-    });
+    // Botón para mover la tarea
+    const moveButton = document.createElement("button");
+    moveButton.innerText = "Mover";
+    moveButton.onclick = () => moveTask(task.id);
+    taskElement.appendChild(moveButton);
+
+    // Botón para eliminar la tarea
+    const deleteButton = document.createElement("button");
+    deleteButton.innerText = "Eliminar";
+    deleteButton.onclick = () => deleteTask(task.id);
+    taskElement.appendChild(deleteButton);
+
+    return taskElement;
 }
 
 // Función para mover una tarea a la siguiente columna
 function moveTask(taskId) {
     const task = tasks.find(t => t.id === taskId);
+    let newStatus;
 
-    // Confirmar el movimiento de la tarea
-    Swal.fire({
-        title: '¿Mover tarea?',
-        text: `¿Quieres mover la tarea "${task.title}" a la siguiente etapa?`,
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Sí, mover',
-        cancelButtonText: 'Cancelar',
-    }).then(result => {
-        if (result.isConfirmed) {
-            // Guardar el estado anterior
-            const oldStatus = task.status;
+    if (task.status === "To Do") newStatus = "In Progress";
+    else if (task.status === "In Progress") newStatus = "Done";
 
-            // Cambiar el estado de la tarea
-            if (task.status === "To Do") task.status = "In Progress";
-            else if (task.status === "In Progress") task.status = "Done";
+    if (newStatus) {
+        // Mostrar confirmación de movimiento con SweetAlert
+        Swal.fire({
+            title: '¿Mover tarea?',
+            text: `¿Quieres mover la tarea "${task.title}" a la siguiente etapa?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, mover',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Cambiar el estado de la tarea
+                task.status = newStatus;
 
-            // Agregar al historial de movimiento
-            moveHistory.push({
-                taskId: task.id,
-                oldStatus: oldStatus,
-                newStatus: task.status,
-                date: new Date().toLocaleString(),
-            });
+                // Actualizar el almacenamiento local
+                localStorage.setItem("tasks", JSON.stringify(tasks));
 
-            // Actualizar el almacenamiento local
-            localStorage.setItem("tasks", JSON.stringify(tasks));
-            localStorage.setItem("moveHistory", JSON.stringify(moveHistory));
+                // Volver a renderizar las tareas
+                renderTasks();
 
-            // Volver a renderizar las tareas
-            renderTasks();
-
-            // Notificación de éxito
-            Swal.fire('¡Avanzaste en la tarea!', `La tarea "${task.title}" ha sido movida exitosamente.`, 'success');
-        }
-    });
+                // Mostrar notificación de éxito
+                Swal.fire('¡Avanzaste en la tarea!', `La tarea "${task.title}" ha sido movida exitosamente.`, 'success');
+            }
+        });
+    }
 }
 
 // Función para eliminar una tarea
 function deleteTask(taskId) {
     const task = tasks.find(t => t.id === taskId);
 
-    // Confirmar la eliminación de la tarea
+    // Confirmación de eliminación con SweetAlert
     Swal.fire({
         title: '¿Eliminar tarea?',
         text: `¿Estás seguro de que quieres eliminar la tarea "${task.title}"?`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar',
-    }).then(result => {
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
         if (result.isConfirmed) {
-            // Agregar al historial de eliminación
-            moveHistory.push({
-                taskId: task.id,
-                oldStatus: task.status,
-                newStatus: "Eliminada",
-                date: new Date().toLocaleString(),
-            });
-
+            // Agregar tarea al historial
+            history.push(task);
             // Filtrar las tareas para eliminar la seleccionada
             tasks = tasks.filter(t => t.id !== taskId);
 
             // Actualizar el almacenamiento local
             localStorage.setItem("tasks", JSON.stringify(tasks));
-            localStorage.setItem("moveHistory", JSON.stringify(moveHistory)); // Guardar historial en localStorage
+            localStorage.setItem("history", JSON.stringify(history));
 
             // Volver a renderizar las tareas
             renderTasks();
+            renderHistory();
 
             // Notificación de tarea eliminada
             Swal.fire('¡Tarea eliminada!', `La tarea "${task.title}" ha sido eliminada.`, 'success');
         }
+    });
+}
+
+// Función para renderizar el historial de tareas
+function renderHistory() {
+    const historyContainer = document.getElementById("historyTasks");
+    historyContainer.innerHTML = ""; // Limpiar el historial
+
+    history.forEach(task => {
+        const taskElement = document.createElement("div");
+        taskElement.classList.add("task");
+        taskElement.innerText = task.title;
+        historyContainer.appendChild(taskElement);
     });
 }
 
@@ -139,17 +131,17 @@ function addTask() {
         showCancelButton: true,
         confirmButtonText: 'Agregar',
         cancelButtonText: 'Cancelar',
-        inputValidator: value => {
+        inputValidator: (value) => {
             if (!value) {
                 return '¡Debes escribir un título para la tarea!';
             }
-        },
-    }).then(result => {
+        }
+    }).then((result) => {
         if (result.isConfirmed) {
             const newTask = {
                 id: Date.now(),
                 title: result.value,
-                status: "To Do",
+                status: "To Do"
             };
             tasks.push(newTask);
 
@@ -165,16 +157,13 @@ function addTask() {
     });
 }
 
-// Cargar tareas desde localStorage al iniciar
-document.addEventListener("DOMContentLoaded", () => {
-    const storedTasks = JSON.parse(localStorage.getItem("tasks"));
-    if (storedTasks) tasks = storedTasks; // Cargar tareas
+// Cargar tareas y historial desde localStorage al iniciar
+window.onload = function() {
+    tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    history = JSON.parse(localStorage.getItem("history")) || [];
+    renderTasks();
+    renderHistory();
+};
 
-    const storedMoveHistory = JSON.parse(localStorage.getItem("moveHistory"));
-    if (storedMoveHistory) moveHistory = storedMoveHistory; // Cargar historial
-
-    renderTasks(); // Renderizar tareas al cargar
-});
-
-// Botón para agregar tarea
+// Agregar evento al botón de agregar tarea
 document.getElementById("addTaskButton").addEventListener("click", addTask);
