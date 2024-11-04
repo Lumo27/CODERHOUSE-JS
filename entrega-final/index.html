@@ -69,7 +69,7 @@
         .button-container {
             display: flex;
             justify-content: center; 
-            margin: 20px ; 
+            margin: 20px; 
         }
 
         #addTaskButton {
@@ -91,27 +91,25 @@
             width: 200px; 
             margin-top: 20px; 
         }
+
+        .task[data-status="todo"] {
+            background-color: #e0e0e0; /* Gris claro */
+        }
+
+        .task[data-status="in-progress"] {
+            background-color: #ffc107; /* Amarillo */
+        }
+
+        .task[data-status="done"] {
+            background-color: #4caf50; /* Verde */
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Columnas de tareas -->
         <div class="column" id="toDoColumn">
-            <h2>To Do</h2>
-            <div class="task">
-                <span>Tarea 1</span>
-                <div>
-                    <button>Mover</button>
-                    <button>Eliminar</button>
-                </div>
-            </div>
-            <div class="task">
-                <span>Tarea 2</span>
-                <div>
-                    <button>Mover</button>
-                    <button>Eliminar</button>
-                </div>
-            </div>
+            <h2>To Do</h2> <!-- Agregado el encabezado para To Do -->
         </div>
         <div class="column" id="inProgressColumn">
             <h2>In Progress</h2>
@@ -127,6 +125,7 @@
 
     <div class="column" id="historyColumn">
         <h2>Historial de Tareas</h2>
+        <div id="historyTasks"></div>  <!-- Cambiado el ID para que coincida con el JavaScript -->
     </div>
     
     <!-- SweetAlert JS -->
