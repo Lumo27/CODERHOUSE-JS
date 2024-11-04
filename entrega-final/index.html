@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Tareas</title>
+    
+    <!-- SweetAlert link -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column; 
+            min-height: 100vh;
+            margin: 20px;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            justify-content: center; 
+            flex-wrap: wrap;
+        }
+
+        .column {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            width: 200px;
+            border-radius: 5px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .column h2 {
+            text-align: center;
+            color: #333;
+            margin-top: 0;
+        }
+
+        .task {
+            background-color: #e0e0e0;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            overflow: hidden; 
+        }
+
+        .task button {
+            margin-left: 5px;
+            padding: 5px;
+            border: none;
+            background-color: #333;
+            color: white;
+            cursor: pointer;
+            border-radius: 3px;
+            flex-shrink: 0; 
+            white-space: nowrap; 
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center; 
+            margin: 20px ; 
+        }
+
+        #addTaskButton {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 200px; 
+        }
+
+        #historyColumn {
+            background-color: #036697;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            width: 200px; 
+            margin-top: 20px; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Columnas de tareas -->
+        <div class="column" id="toDoColumn">
+            <h2>To Do</h2>
+            <div class="task">
+                <span>Tarea 1</span>
+                <div>
+                    <button>Mover</button>
+                    <button>Eliminar</button>
+                </div>
+            </div>
+            <div class="task">
+                <span>Tarea 2</span>
+                <div>
+                    <button>Mover</button>
+                    <button>Eliminar</button>
+                </div>
+            </div>
+        </div>
+        <div class="column" id="inProgressColumn">
+            <h2>In Progress</h2>
+        </div>
+        <div class="column" id="doneColumn">
+            <h2>Done</h2>
+        </div>
+    </div>
+    
+    <div class="button-container">
+        <button id="addTaskButton">Agregar Tarea</button>
+    </div>
+
+    <div class="column" id="historyColumn">
+        <h2>Historial de Tareas</h2>
+    </div>
+    
+    <!-- SweetAlert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- JavaScript de la aplicación -->
+    <script src="index.js"></script>
+</body>
+</html>
